@@ -17,12 +17,10 @@ A Python-based REST API automation framework for BDD-driven testing, contract va
 
 Watch the project demonstration covering framework setup, API execution, BDD scenarios, validation, reporting, and the overall automation workflow.
 
-[▶️ Watch the Full Project Demo](VIDEO_LINK_HERE)
+[▶️ Watch the Full Project Demo](https://drive.google.com/file/d/1514yLksAXAjsQ_R9jSgwG5VS1iAPGYFb/view?usp=drivesdk)
 
 The demonstration showcases the framework setup, BDD workflow, API execution, validation, reporting, and automation flow:
-[▶️ Watch the Full Project Demonstration](VIDEO_LINK_HERE)
-
-> **Demonstration Video:** Direct repository recording link: [Google Drive Video Stream](https://drive.google.com/file/d/1514yLksAXAjsQ_R9jSgwG5VS1iAPGYFb/view?usp=drivesdk) *(replace `VIDEO_LINK_HERE` with your primary hosted streaming URL when ready)*.
+[▶️ Watch the Full Project Demonstration](https://drive.google.com/file/d/1514yLksAXAjsQ_R9jSgwG5VS1iAPGYFb/view?usp=drivesdk)
 
 ---
 
