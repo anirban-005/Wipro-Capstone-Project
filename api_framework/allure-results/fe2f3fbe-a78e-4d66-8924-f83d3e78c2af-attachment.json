@@ -1,0 +1,16 @@
+{
+  "Request URL": "https://gorest.co.in/public/v2/users",
+  "Request Method": "POST",
+  "Request Headers": {
+    "User-Agent": "python-requests/2.34.2",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept": "application/json",
+    "Connection": "keep-alive",
+    "Authorization": "Bearer [REDACTED_TOKEN]",
+    "Content-Length": "97",
+    "Content-Type": "application/json"
+  },
+  "Request Body": "{\"name\": \"James Escobar\", \"email\": \"cnguyen@example.org\", \"gender\": \"male\", \"status\": \"inactive\"}",
+  "Response Status": 201,
+  "Response Body": "{\"id\":8629305,\"name\":\"James Escobar\",\"email\":\"cnguyen@example.org\",\"gender\":\"male\",\"status\":\"inactive\"}"
+}

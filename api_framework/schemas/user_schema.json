@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GoRest User",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "email", "gender", "status"],
+  "properties": {
+    "id": {"type": "integer"},
+    "name": {"type": "string", "minLength": 1},
+    "email": {"type": "string", "format": "email"},
+    "gender": {"type": "string", "enum": ["male", "female"]},
+    "status": {"type": "string", "enum": ["active", "inactive"]}
+  }
+}

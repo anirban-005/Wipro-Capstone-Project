@@ -1,0 +1,26 @@
+name: API Tests
+
+on:
+  push:
+
+jobs:
+  behave:
+    runs-on: ubuntu-latest
+    env:
+      GOREST_TOKEN: dummy-gorest-token
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: pip install -r api_framework/requirements.txt
+      - name: Run Behave API tests
+        working-directory: api_framework
+        run: behave -f allure_behave.formatter:AllureFormatter -o allure-results features/
+      - name: Upload Allure results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: allure-results
+          path: api_framework/allure-results

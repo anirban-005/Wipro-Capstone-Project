@@ -1,0 +1,14 @@
+{
+  "Request URL": "https://gorest.co.in/public/v2/users/8629304",
+  "Request Method": "GET",
+  "Request Headers": {
+    "User-Agent": "python-requests/2.34.2",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept": "application/json",
+    "Connection": "keep-alive",
+    "Authorization": "Bearer [REDACTED_TOKEN]"
+  },
+  "Request Body": "",
+  "Response Status": 200,
+  "Response Body": "{\"id\":8629304,\"name\":\"Ryan Barrett\",\"email\":\"qparker@example.com\",\"gender\":\"male\",\"status\":\"active\"}"
+}

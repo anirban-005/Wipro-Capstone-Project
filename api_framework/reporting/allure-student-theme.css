@@ -1,0 +1,118 @@
+/* Lightweight overrides for the generated Allure report.
+   The report remains a standard Allure application; this only removes visual excess. */
+
+:root {
+    --report-text: #24292f;
+    --report-muted: #57606a;
+    --report-line: #d0d7de;
+    --report-surface: #ffffff;
+    --report-subtle: #f6f8fa;
+    --report-accent: #0969da;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+    color: var(--report-text);
+}
+
+.side-nav {
+    background: #f6f8fa !important;
+    border-right: 1px solid var(--report-line) !important;
+    box-shadow: none !important;
+}
+
+.side-nav__head,
+.side-nav__footer {
+    border-color: var(--report-line) !important;
+}
+
+.side-nav__link {
+    border-radius: 2px !important;
+    color: var(--report-text) !important;
+}
+
+.side-nav__link_active {
+    background: #ddf4ff !important;
+    color: #0550ae !important;
+}
+
+.pane__title,
+.pane__section-title,
+.widget__title {
+    color: var(--report-text) !important;
+    font-weight: 600 !important;
+}
+
+.widget,
+.summary-widget,
+.status-details,
+.test-result,
+.attachment__table-container {
+    background: var(--report-surface) !important;
+    border: 1px solid var(--report-line) !important;
+    border-radius: 2px !important;
+    box-shadow: none !important;
+}
+
+.widget__title,
+.summary-widget__stats,
+.table__head,
+.test-result-execution__title {
+    background: var(--report-subtle) !important;
+    border-color: var(--report-line) !important;
+}
+
+.table__row,
+.parameters-table__row,
+.attachment__table tr {
+    border-color: var(--report-line) !important;
+}
+
+.table__row:hover,
+.tree__strut:hover {
+    background: #f6f8fa !important;
+}
+
+.test-result__name,
+.test-result-execution__stage-title {
+    font-weight: 600 !important;
+}
+
+pre,
+code,
+.attachment__source,
+.status-details__trace,
+.status-details__message {
+    background: var(--report-subtle) !important;
+    border: 1px solid var(--report-line) !important;
+    border-radius: 2px !important;
+    color: var(--report-text) !important;
+    font-family: Consolas, "Cascadia Code", "Courier New", monospace !important;
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+}
+
+a,
+.link,
+.pane__subtitle {
+    color: var(--report-accent) !important;
+}
+
+* {
+    transition: none !important;
+}
+
+@media (max-width: 900px) {
+    .widgets-grid,
+    .widget__column {
+        display: block !important;
+    }
+
+    .widget {
+        margin-bottom: 12px !important;
+    }
+}

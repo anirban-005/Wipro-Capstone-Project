@@ -1,0 +1,11 @@
+# Step 1: Navigate to project
+cd "D:\Wipro Evaluation\02_Capstone_Project"
+
+# Step 2: Enter token (press Enter, then paste your GoRest token)
+$secureToken = Read-Host "Enter GOREST_TOKEN" -AsSecureString
+$pointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($secureToken)
+$env:GOREST_TOKEN = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($pointer)
+[Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
+
+# Step 3: Launch live execution
+.\run_live_execution.ps1

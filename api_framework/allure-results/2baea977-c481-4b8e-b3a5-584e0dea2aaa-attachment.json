@@ -1,0 +1,16 @@
+{
+  "Request URL": "https://gorest.co.in/public/v2/users/8629305",
+  "Request Method": "PATCH",
+  "Request Headers": {
+    "User-Agent": "python-requests/2.34.2",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept": "application/json",
+    "Connection": "keep-alive",
+    "Authorization": "Bearer [REDACTED_TOKEN]",
+    "Content-Length": "47",
+    "Content-Type": "application/json"
+  },
+  "Request Body": "{\"name\": \"Updated William\", \"status\": \"active\"}",
+  "Response Status": 200,
+  "Response Body": "{\"id\":8629305,\"name\":\"Updated William\",\"email\":\"cnguyen@example.org\",\"gender\":\"male\",\"status\":\"active\"}"
+}

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Live Test Execution</title>
+    <style>
+        :root { --line: #d0d7de; --muted: #57606a; --panel: #f6f8fa; --blue: #0969da; --green: #1a7f37; --red: #cf222e; --orange: #9a6700; }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: #fff; color: #24292f; font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+        main { max-width: 960px; margin: 28px auto; padding: 0 20px; }
+        h1 { margin: 0; font-size: 22px; font-weight: 600; }
+        h2 { margin: 0 0 12px; font-size: 16px; font-weight: 600; }
+        .subtle { color: var(--muted); margin: 6px 0 22px; }
+        section { border: 1px solid var(--line); margin: 16px 0; padding: 16px; }
+        .current { display: grid; gap: 8px; }
+        .test-name { font-size: 17px; font-weight: 600; }
+        .request { font-family: Consolas, "Courier New", monospace; color: #0550ae; }
+        .facts, .summary { display: flex; flex-wrap: wrap; gap: 10px 24px; color: var(--muted); }
+        .facts strong, .summary strong { color: #24292f; }
+        .workflow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0; }
+        .workflow-step { min-width: 130px; flex: 1; padding: 10px 12px; border: 1px solid var(--line); background: var(--panel); color: var(--muted); }
+        .workflow-step + .workflow-step { border-left: 0; }
+        .workflow-step::before { content: "○ "; font-weight: 600; }
+        .workflow-step.completed { color: var(--green); background: #f0fff4; }
+        .workflow-step.completed::before { content: "✓ "; }
+        .workflow-step.running { color: var(--blue); border-color: var(--blue); background: #ddf4ff; }
+        .workflow-step.running::before { content: "● "; }
+        .workflow-step.failed { color: var(--red); background: #ffebe9; }
+        .workflow-step.failed::before { content: "✕ "; }
+        .workflow-step.broken { color: var(--orange); background: #fff8c5; }
+        .workflow-step.broken::before { content: "! "; }
+        .workflow-step.skipped { color: var(--muted); }
+        .workflow-step.skipped::before { content: "– "; }
+        .log { margin: 0; padding: 10px; max-height: 260px; overflow: auto; border: 1px solid var(--line); background: var(--panel); font: 13px/1.5 Consolas, "Courier New", monospace; white-space: pre-wrap; }
+        .empty { color: var(--muted); }
+        @media (max-width: 680px) { .workflow-step { flex-basis: 48%; } .workflow-step + .workflow-step { border-left: 1px solid var(--line); } }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>API Test Execution</h1>
+        <p class="subtle" id="run-status">Waiting for an execution state file.</p>
+        <section>
+            <h2 id="test-heading">Current Test</h2>
+            <div class="current" id="current-test"><span class="empty">No active test execution.</span></div>
+        </section>
+        <section>
+            <h2>Execution Workflow</h2>
+            <div class="workflow" id="workflow"><span class="empty">Workflow appears when a Behave scenario starts.</span></div>
+        </section>
+        <section>
+            <h2>Execution Log</h2>
+            <pre class="log" id="execution-log">No execution events recorded.</pre>
+        </section>
+        <section>
+            <h2>Execution Summary</h2>
+            <div class="summary" id="summary">No scenarios completed.</div>
+        </section>
+    </main>
+    <script>
+        const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", "\"": "&quot;" }[character]));
+        const render = (state) => {
+            document.getElementById("run-status").textContent = `Run status: ${state.run_status || "IDLE"}${state.updated_at ? ` · Updated ${state.updated_at}` : ""}`;
+            const test = state.current_test;
+            document.getElementById("test-heading").textContent = state.run_status === "RUNNING" ? "Current Test" : "Last Executed Test";
+            document.getElementById("current-test").innerHTML = test ? `
+                <div class="test-name">${escapeHtml(test.name)}</div>
+                <div class="request">${escapeHtml(test.method || "")} ${escapeHtml(test.endpoint || "")}</div>
+                <div class="facts"><span>Result: <strong>${escapeHtml(test.status || "RUNNING")}</strong></span><span>Expected HTTP: <strong>${escapeHtml(test.expected_http ?? "not asserted")}</strong></span><span>Actual HTTP: <strong>${escapeHtml(test.http_status ?? "pending")}</strong></span><span>Response time: <strong>${escapeHtml(test.response_time_ms ?? "pending")} ${test.response_time_ms == null ? "" : "ms"}</strong></span><span>Assertions: <strong>${escapeHtml(test.assertions?.passed ?? 0)}/${escapeHtml((test.assertions?.passed ?? 0) + (test.assertions?.failed ?? 0))} passed</strong></span></div>${test.failure_detail ? `<div class="facts"><span>Failure: <strong>${escapeHtml(test.failure_detail)}</strong></span></div>` : ""}` : '<span class="empty">No active test execution.</span>';
+            document.getElementById("workflow").innerHTML = (state.workflow || []).map((stage) => `<div class="workflow-step ${escapeHtml(stage.status)}">${escapeHtml(stage.label)}</div>`).join("") || '<span class="empty">Workflow appears when a Behave scenario starts.</span>';
+            const isCompleted = state.run_status === "COMPLETED";
+            const activeTestName = test ? test.name : null;
+            const visibleEvents = (isCompleted && activeTestName)
+                ? (state.events || []).filter((e) => e.test === activeTestName)
+                : (state.events || []);
+            const groups = [];
+            for (const event of visibleEvents) {
+                const testName = event.test || "Execution";
+                const previous = groups[groups.length - 1];
+                if (!previous || previous.test !== testName) groups.push({ test: testName, events: [] });
+                groups[groups.length - 1].events.push(event);
+            }
+            document.getElementById("execution-log").textContent = groups.map((group) => `${group.test}\n${"-".repeat(group.test.length)}\n${group.events.map((event) => `${event.timestamp}\n${event.message}`).join("\n\n")}`).join("\n\n") || "No execution events recorded.";
+            const summary = state.summary || {};
+            document.getElementById("summary").innerHTML = ["total", "passed", "failed", "broken", "skipped"].map((key) => `<span>${key[0].toUpperCase() + key.slice(1)}: <strong>${escapeHtml(summary[key] ?? 0)}</strong></span>`).join("");
+        };
+        const loadState = async () => {
+            try { render(await (await fetch("/api/state", { cache: "no-store" })).json()); }
+            catch { document.getElementById("run-status").textContent = "Live state server is unavailable. The Allure report remains available independently."; }
+        };
+        loadState();
+        window.setInterval(loadState, 1000);
+    </script>
+</body>
+</html>
